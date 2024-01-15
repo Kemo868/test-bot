@@ -1,5 +1,5 @@
 require('dotenv').config();
-const keep_alive = require('./keep_alive.js');
+
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
