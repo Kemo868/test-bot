@@ -1,0 +1,23 @@
+{
+  "name": "testbot",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": "",
+  "dependencies": {
+    "@discordjs/rest": "^2.2.0",
+    "discord-api-types": "^0.37.67",
+    "discord-invite": "^4.0.8",
+    "discord-inviter": "^0.9.3",
+    "discord.js": "13.14",
+    "dotenv": "^16.3.1",
+    "fs": "^0.0.1-security",
+    "punycode.js": "^2.3.1",
+    "rest": "^2.0.0"
+  }
+}
