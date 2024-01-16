@@ -134,7 +134,7 @@ client.on('ready', async () => {
 
     });
 
-    console.log('Buttons sent to the channel.');
+    console.log('Buttons sent to the channel✅.');
   } catch (error) {
     console.error(error);
   }
