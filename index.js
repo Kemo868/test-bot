@@ -1,5 +1,4 @@
 require('dotenv').config();
-const keep_alive = require('./keep_alive.js')
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
@@ -9,25 +8,42 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
   ],
 });
+  
+const prefix = '!'; // يمكنك تغيير البادئة إلى ما تريد
+client.on('messageCreate', async (message) => {
+  if (message.author.bot || !message.content.startsWith(prefix)) return;
 
-client.on("ready", () => {
-    setInterval(() => {
-      client.user.setActivity(updateUptime());
-    }, 60 * 1000);
-  });
-  
-  uptime = 0;
-  function updateUptime() {
-    uptime++;
-    const days = Math.floor(uptime / 1440);
-    const hours = Math.floor((uptime % 1440) / 60);
-    const minutes = Math.floor(uptime % 60);
-    const uptimeMessage = `  D: ${days} H: ${hours} M: ${minutes}`;
-  
-    return uptimeMessage;
+  const args = message.content.slice(prefix.length).trim().split(/ +/);
+  const command = args.shift().toLowerCase();
+
+  if (command === 'cr') {
+    // التحقق من أن الشخص لديه الصلاحيات الكافية لإنشاء الرولات
+    if (!message.member.permissions.has('1192593384481755296')) {
+      return message.reply('ليس لديك الصلاحيات اللازمة لإنشاء الرولات.');
+    }
+
+    // استخدام الأسماء المحددة لإنشاء الرولات
+    const roleNames = args;
+    const createdRoles = [];
+
+    try {
+      const roles = await Promise.all(roleNames.map(async (roleName) => {
+        return await message.guild.roles.create({
+          name: roleName,
+          color: '#ffffff',
+        });
+      }));
+
+      createdRoles.push(...roles);
+    } catch (error) {
+      console.error('Error creating roles:', error);
+      return message.reply('An error تعديت 100 حرف');
+    }
+
+    message.reply(`تم إنشاء الرولات: ${createdRoles.map((role) => role.name).join(', ')}`);
   }
+});
 
-  
 const colleges = [
   {
     id: '1192593387325505718',
@@ -169,11 +185,11 @@ client.on('interactionCreate', async (interaction) => {
 
       if (hasRole) {
         await interaction.member.roles.remove(role);
-        await interaction.reply({  content : `تم ازالة تخصصك ${role.name} بنجاح ❌`,
+        await interaction.reply({  content : `تم ازالة تخصصك ${role.name} بنجاح ❌.`,
         ephemeral: true });
       } else {
         await interaction.member.roles.add(role);
-        await interaction.reply({  content : `تم اختيار تخصصك ${role.name} بنجاح ✅..`,
+        await interaction.reply({  content : `تم اختيار تخصصك ${role.name} بنجاح ✅.`,
         ephemeral: true });
       }  
     }
