@@ -216,7 +216,7 @@ client.on('ready', async () => {
       ephemeral: true,
     });
 
-    console.log('Buttons sent to the channel.');
+    console.log('Buttons sent to the channel ITC ✅.');
   } catch (error) {
     console.error('Error sending buttons:', error);
   }
