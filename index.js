@@ -1,5 +1,8 @@
 require('dotenv').config();
 const keep_alive = require('./keep_alive.js')
+const colleges = require('./colleges.json');
+const colleges2 = require('./colleges2.json');
+
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
@@ -9,88 +12,78 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
   ],
 });
-  
-const prefix = '!'; // يمكنك تغيير البادئة إلى ما تريد
-client.on('messageCreate', async (message) => {
-  if (message.author.bot || !message.content.startsWith(prefix)) return;
 
-  const args = message.content.slice(prefix.length).trim().split(/ +/);
-  const command = args.shift().toLowerCase();
+client.on('ready', async () => {
+  try {
+    const channel = await client.channels.cache.get('1196528663273938975');
+    if (!channel) return;
 
-  if (command === 'cr') {
-    // التحقق من أن الشخص لديه الصلاحيات الكافية لإنشاء الرولات
-    if (!message.member.permissions.has('1192593384481755296')) {
-      return message.reply('ليس لديك الصلاحيات اللازمة لإنشاء الرولات.');
-    }
+    const exampleEmbed2 = {
+      color: 0x0099FF,
+      title: '..اختار موادك',
+      author: {
+        name: ' ',
+      },
+      description: 'يمكنك كذلك رؤية الخطة الدراسية الخاصة بك ⬇️',
+      image: {
+        url: 'https://i.imgur.com/1amKAjJ.png',
+      },
+      footer: {
+        text: 'يرجى الضغط على الزر ادناه ...',
+      },
+    };
+    await channel.send({ embeds: [exampleEmbed2] });
 
-    // استخدام الأسماء المحددة لإنشاء الرولات
-    const roleNames = args;
-    const createdRoles = [];
+    const rows2 = [];
 
-    try {
-      const roles = await Promise.all(roleNames.map(async (roleName) => {
-        return await message.guild.roles.create({
-          name: roleName,
-          color: '#ffffff',
-        });
-      }));
+    colleges2.forEach((college2, index) => {
+      const button2 = new MessageButton()
+        .setCustomId(college2.id)
+        .setLabel(college2.label)
+        .setStyle('PRIMARY');
 
-      createdRoles.push(...roles);
-    } catch (error) {
-      console.error('Error creating roles:', error);
-      return message.reply('An error تعديت 100 حرف');
-    }
+      if (index % 5 === 0) {
+        rows2.push(new MessageActionRow());
+      }
 
-    message.reply(`تم إنشاء الرولات: ${createdRoles.map((role) => role.name).join(', ')}`);
+      rows2[rows2.length - 1].addComponents(button2);
+    });
+
+    await channel.send({
+      content: ' ',
+      components: rows2,
+      ephemeral: true,
+    });
+
+    console.log('Buttons sent to the channel اختار مادتك 2 ✅.');
+  } catch (error) {
+    console.error(error);
   }
 });
 
-const colleges = [
-  {
-    id: '1192593387325505718',
-    label: '💻 كلية دراسات الحاسب الآلي',
-    subSpecializations: [
-      'مسار تقنية المعلومات والحوسبة ( ITC )',
-      'مسار الحوسبة والأعمال ( CSB )',
-      'مسار تطوير الويب ( WD )',
-      'مسار علوم الحاسب الآلي ( CS )',
-      'مسار الأمن والشبكات ( SN )',
-    ],
-    roles: {
-      'مسار تقنية المعلومات والحوسبة ( ITC )': '1192593391045853218',
-      'مسار الحوسبة والأعمال ( CSB )': '1192593392685809855',
-      'مسار تطوير الويب ( WD )': '1192593393885384824',
-      'مسار علوم الحاسب الآلي ( CS )': '1192593395324047491',
-      'مسار الأمن والشبكات ( SN )': '1192593396297105629',
-    },
-  },
-  {
-    id: '1192593388642504725',
-    label: '💼 كلية دراسات إدارة الأعمال',
-    subSpecializations: [
-      'مسار النظم الإدارية ( BA )',
-      'مسار التسويق ( MKT )',
-      'مسار المحاسبة ( ACC )',
-      'مسار المحاسبة باللغة العربية ( ACC-AR )',
-    ],
-    roles: {
-      'مسار النظم الإدارية ( BA )': '1192593397312135229',
-      'مسار التسويق ( MKT )': '1192593398918545630',
-      'مسار المحاسبة ( ACC )': '1192593400369787111',
-      'مسار المحاسبة باللغة العربية ( ACC-AR )': '1192593401355436194',
-    },
-  },
-  {
-    id: '1192593389745606879',
-    label: '🗺 كلية الدراسات اللغوية',
-    subSpecializations: [
-      'مسار اللغة الإنجليزية وآدابها ( ELL )',
-    ],
-    roles: {
-      'مسار اللغة الإنجليزية وآدابها ( ELL )': '1192593402466934965',
-    },
-  },
-];
+client.on('interactionCreate', async (interaction) => {
+  if (!interaction.isButton()) return;
+  try {
+    const selectedRoleId = interaction.customId;
+    const role = interaction.guild.roles.cache.get(selectedRoleId);
+
+    if (role) {
+      const hasRole = interaction.member.roles.cache.has(selectedRoleId);
+
+      if (hasRole) {
+        await interaction.member.roles.remove(role);
+        await interaction.reply({ content: `تم ازالة مادتك ${role.name} بنجاح ❌.`, ephemeral: true });
+      } else {
+        await interaction.member.roles.add(role);
+        await interaction.reply({ content: `تم اختيار مادتك ${role.name} بنجاح ✅.`, ephemeral: true });
+      }
+    }
+  } catch (error) {
+    console.error('Error handling button click:', error);
+    await interaction.reply({ content: 'حدثت مشكلة أثناء معالجة الطلب.', ephemeral: true });
+  }
+});
+  
 
 client.on('ready', async () => {
   try {
@@ -135,7 +128,7 @@ client.on('ready', async () => {
 
     });
 
-    console.log('Buttons sent to the channel✅.');
+    console.log('Buttons sent to the channel 1 اختار تخصصك ✅.');
   } catch (error) {
     console.error(error);
   }
@@ -161,7 +154,7 @@ client.on('interactionCreate', async (interaction) => {
 
     await interaction.reply({
       content: 'اختار مسارك..',
-      components: [subSpecializationRow],
+      components: subSpecializationRow,
       ephemeral: true
     });
   }
@@ -196,5 +189,5 @@ client.on('interactionCreate', async (interaction) => {
     }
   }
 });
-
+  
 client.login(process.env.TOKEN);
