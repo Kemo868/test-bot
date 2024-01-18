@@ -1,5 +1,5 @@
 require('dotenv').config();
-const keep_alive = require('./keep_alive.js')
+
 const colleges = require('./colleges.json');
 const colleges2 = require('./colleges2.json');
 
@@ -34,12 +34,13 @@ client.on('ready', async () => {
     };
     await channel.send({ embeds: [exampleEmbed2] });
 
+
     const rows2 = [];
 
-    colleges2.forEach((college2, index) => {
+    colleges2.forEach((college, index) => {
       const button2 = new MessageButton()
-        .setCustomId(college2.id)
-        .setLabel(college2.label)
+        .setCustomId(college.id)
+        .setLabel(college.label)
         .setStyle('PRIMARY');
 
       if (index % 5 === 0) {
@@ -78,9 +79,13 @@ client.on('interactionCreate', async (interaction) => {
         await interaction.reply({ content: `تم اختيار مادتك ${role.name} بنجاح ✅.`, ephemeral: true });
       }
     }
+    if (interaction.replied) {
+      console.log('تم الرد على هذا التفاعل بالفعل.');
+      return;
+    }
   } catch (error) {
     console.error('Error handling button click:', error);
-    await interaction.reply({ content: 'حدثت مشكلة أثناء معالجة الطلب.', ephemeral: true });
+
   }
 });
   
@@ -120,12 +125,11 @@ client.on('ready', async () => {
 
       rows[rows.length - 1].addComponents(button);
     });
-
+  
     await channel.send({
       content: ' ',
       components: rows,
       ephemeral: true
-
     });
 
     console.log('Buttons sent to the channel 1 اختار تخصصك ✅.');
@@ -135,6 +139,7 @@ client.on('ready', async () => {
 });
 
 client.on('interactionCreate', async (interaction) => {
+  try {
   if (!interaction.isButton()) return;
 
   const selectedCollegeId = interaction.customId;
@@ -153,10 +158,14 @@ client.on('interactionCreate', async (interaction) => {
     });
 
     await interaction.reply({
-      content: 'اختار مسارك..',
-      components: subSpecializationRow,
+      content: 'تم اختيار كليتك \n اختار مسارك..',
+      components: [subSpecializationRow],
       ephemeral: true
     });
+  }
+  }catch (error) {
+    console.error('Error handling button click:', error);
+ 
   }
 });
 
@@ -186,6 +195,10 @@ client.on('interactionCreate', async (interaction) => {
         await interaction.reply({  content : `تم اختيار تخصصك ${role.name} بنجاح ✅.`,
         ephemeral: true });
       }  
+      if (interaction.replied) {
+        console.log('تم الرد على هذا التفاعل بالفعل.');
+        return;
+      }
     }
   }
 });
