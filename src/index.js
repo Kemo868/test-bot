@@ -11,7 +11,22 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
   ],
 });
-
+client.on("ready", () => {
+    setInterval(() => {
+      client.user.setActivity(updateUptime());
+    }, 60 * 1000);
+  });
+  
+  uptime = 0;
+  function updateUptime() {
+    uptime++;
+    const days = Math.floor(uptime / 1440);
+    const hours = Math.floor((uptime % 1440) / 60);
+    const minutes = Math.floor(uptime % 60);
+    const uptimeMessage = `  D: ${days} H: ${hours} M: ${minutes}`;
+  
+    return uptimeMessage;
+  }
 client.on('interactionCreate', async (interaction) => {
   const requiredRole = '1192593386188832838'; // استبدل بمعرف الرتبة الخاص بك
   const targetChannelId = '1197785650771005460'; // استبدل بمعرف القناة الخاص بك
