@@ -1,8 +1,7 @@
 require('dotenv').config();
-const keep_alive = require('./keep_alive.js')
+const keep_alive = require('../keep_alive.js')
 const colleges = require('./colleges.json');
 const colleges2 = require('./colleges2.json');
-
 const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
@@ -12,22 +11,19 @@ const client = new Client({
     Intents.FLAGS.GUILD_MESSAGES,
   ],
 });
-client.on("ready", () => {
-    setInterval(() => {
-      client.user.setActivity(updateUptime());
-    }, 60 * 1000);
-  });
-  
-  uptime = 0;
-  function updateUptime() {
-    uptime++;
-    const days = Math.floor(uptime / 1440);
-    const hours = Math.floor((uptime % 1440) / 60);
-    const minutes = Math.floor(uptime % 60);
-    const uptimeMessage = `  D: ${days} H: ${hours} M: ${minutes}`;
-  
-    return uptimeMessage;
-  }
+
+client.on('interactionCreate', async (interaction) => {
+  const requiredRole = '1192593386188832838'; // استبدل بمعرف الرتبة الخاص بك
+  const targetChannelId = '1197785650771005460'; // استبدل بمعرف القناة الخاص بك
+  if (!interaction.member.roles.cache.has(requiredRole)) {
+    await interaction.reply({
+      content: `ليس لديك الرول المطلوب. للضغط على الزر، يرجى الذهاب إلى روم <#${targetChannelId}>, و طلب رول الطلاب و الطالبات `,
+      ephemeral: true
+    });
+    return;
+  }
+})
+
 client.on('ready', async () => {
   try {
     const channel = await client.channels.cache.get('1196528663273938975');
@@ -155,7 +151,6 @@ client.on('ready', async () => {
 
 client.on('interactionCreate', async (interaction) => {
   try {
-  if (!interaction.isButton()) return;
 
   const selectedCollegeId = interaction.customId;
   const selectedCollege = colleges.find((college) => college.id === selectedCollegeId);
