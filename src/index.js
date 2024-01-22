@@ -40,6 +40,31 @@ client.on('interactionCreate', async (interaction) => {
 })
 
 client.on('ready', async () => {
+  const channel = client.channels.cache.get('1197785650771005460');
+  if (!channel) return console.log('القناة غير موجودة.');
+
+  const studentRoleEmbed = new MessageEmbed()
+      .setColor('#0099ff')
+      .setTitle('رول خاص للطلاب!')
+      .setDescription('هناك رول خاصه للطلبه فقط ولها خصائص عديده. لأخذها يجب التأكد انك طالب في الجامعة العربية المفتوحة ولا نستطيع اعطائك الرول من غير ما نتأكد.')
+      .addFields(
+          { name: 'كيفية الحصول على الرول', 
+          value: 'يرجى الضغط على زر "طلب" لبدء العملية.' }
+      )
+      .setThumbnail('https://i.imgur.com/5xKSOYk.png')
+
+  const row = new MessageActionRow()
+      .addComponents(
+          new MessageButton()
+              .setCustomId('request_role')
+              .setLabel('طلب')
+              .setStyle('PRIMARY'),
+      );
+
+  channel.send({ embeds: [studentRoleEmbed], components: [row] });
+});
+
+client.on('ready', async () => {
   try {
     const channel = await client.channels.cache.get('1196528663273938975');
     if (!channel) return;
