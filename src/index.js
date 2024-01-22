@@ -61,7 +61,8 @@ client.on('ready', async () => {
               .setLabel('طلب')
               .setStyle('PRIMARY'),
       );
-
+  
+  console.log('Buttons sent to the channel روم التوثيق 3 ✅.');
   channel.send({ embeds: [studentRoleEmbed], components: [row] });
 });
 
