@@ -45,13 +45,14 @@ client.on('ready', async () => {
 
   const studentRoleEmbed = new MessageEmbed()
       .setColor('#0099ff')
-      .setTitle('رول خاص للطلاب!')
+      .setTitle('رول خاص للطلاب والطالبات!')
       .setDescription('هناك رول خاصه للطلبه فقط ولها خصائص عديده. لأخذها يجب التأكد انك طالب في الجامعة العربية المفتوحة ولا نستطيع اعطائك الرول من غير ما نتأكد.')
+      .setImage('https://i.imgur.com/5xKSOYk.png')
       .addFields(
           { name: 'كيفية الحصول على الرول', 
           value: 'يرجى الضغط على زر "طلب" لبدء العملية.' }
       )
-      .setThumbnail('https://i.imgur.com/5xKSOYk.png')
+
 
   const row = new MessageActionRow()
       .addComponents(
@@ -62,6 +63,14 @@ client.on('ready', async () => {
       );
 
   channel.send({ embeds: [studentRoleEmbed], components: [row] });
+});
+
+client.on('interactionCreate', async interaction => {
+  if (!interaction.isButton()) return;
+
+  if (interaction.customId === 'request_role') {
+      await interaction.reply({ content: 'تم الطلب بنجاح ✅! سوف يتواصلون معك مشرفين السيرفر أو منسوبي إدارة السيرفر في أقرب وقت ممكن.', ephemeral: true });
+  }
 });
 
 client.on('ready', async () => {
