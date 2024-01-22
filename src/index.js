@@ -63,18 +63,6 @@ client.on('interactionCreate', async interaction => {
   }
 });
 
-client.on('interactionCreate', async (interaction) => {
-  const requiredRole = '1192593386188832838'; // استبدل بمعرف الرتبة الخاص بك
-  const targetChannelId = '1197785650771005460'; // استبدل بمعرف القناة الخاص بك
-  if (!interaction.member.roles.cache.has(requiredRole)) {
-    await interaction.reply({
-      content: `ليس لديك الرول المطلوب. للضغط على الزر، يرجى الذهاب إلى روم <#${targetChannelId}>, و طلب رول الطلاب و الطالبات `,
-      ephemeral: true
-    });
-    return;
-  }
-})
-
 client.on('ready', async () => {
   try {
     const channel = await client.channels.cache.get('1196528663273938975');
@@ -202,6 +190,15 @@ client.on('ready', async () => {
 
 client.on('interactionCreate', async (interaction) => {
   try {
+      const requiredRole = '1192593386188832838'; // استبدل بمعرف الرتبة الخاص بك
+      const targetChannelId = '1197785650771005460'; // استبدل بمعرف القناة الخاص بك
+      if (!interaction.member.roles.cache.has(requiredRole)) {
+        await interaction.reply({
+          content: `ليس لديك الرول المطلوب. للضغط على الزر، يرجى الذهاب إلى روم <#${targetChannelId}>, و طلب رول الطلاب و الطالبات `,
+          ephemeral: true
+        });
+        return;
+      }
 
   const selectedCollegeId = interaction.customId;
   const selectedCollege = colleges.find((college) => college.id === selectedCollegeId);
