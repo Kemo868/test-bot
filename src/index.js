@@ -44,7 +44,7 @@ client.on('ready', async () => {
   if (!channel) return console.log('القناة غير موجودة.');
 
   const studentRoleEmbed = new MessageEmbed()
-      .setColor('#0099ff')
+      .setColor('#002c57')
       .setTitle('رول خاص للطلاب والطالبات!')
       .setDescription('هناك رول خاصه للطلبه فقط ولها خصائص عديده. لأخذها يجب التأكد انك طالب في الجامعة العربية المفتوحة ولا نستطيع اعطائك الرول من غير ما نتأكد.')
       .setImage('https://i.imgur.com/5xKSOYk.png')
