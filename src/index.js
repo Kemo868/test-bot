@@ -3,13 +3,16 @@ const keep_alive = require('../keep_alive.js')
 const colleges = require('./colleges.json');
 const colleges2 = require('./colleges2.json');
 const fs = require('fs');
-const { Client, Intents, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
+const { Client, Intents, Collection, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
   intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_MEMBERS,
     Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_PRESENCES,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+    Intents.FLAGS.DIRECT_MESSAGES
   ],
 });
 client.on("ready", () => {
