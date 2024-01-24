@@ -32,10 +32,6 @@ client.on("ready", () => {
     return uptimeMessage;
   }
 
-client.on('ready', async () => {
-  const channel = client.channels.cache.get('1197785650771005460');
-  if (!channel) return console.log('القناة غير موجودة.');
-
   client.commands = new Collection();
 
 // قراءة ملفات الأوامر
