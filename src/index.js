@@ -3,6 +3,7 @@ const keep_alive = require('../keep_alive.js')
 const colleges = require('./colleges.json');
 const colleges2 = require('./colleges2.json');
 const fs = require('fs');
+const path = require('path');
 const { Client, Intents, Collection, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 
 const client = new Client({
@@ -35,20 +36,16 @@ client.on("ready", () => {
 client.commands = new Collection();
 
 // قراءة ملفات الأوامر
-const commandFiles = fs.readdirSync('../commands').filter(file => file.endsWith('.js'));
+const commandsDir = path.join(__dirname, 'commands');
 
-for (const file of commandFiles) {
-  const command = require(`../commands/${file}`);
-  // تأكد من أن كائن الأمر معرف وله خاصية name
-  if (command && command.data && command.data.name) {
-      client.commands.set(command.data.name, command);
-  } else {
-      console.error(`مشكلة في تحميل الأمر من الملف: ${file}`);
-  }
-  client.once('ready', () => {
-    console.log('البوت جاهز!');
-});
+try {
+  const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith('.js'));
+  console.log(commandFiles);
+} catch (error) {
+  console.error(error);
 }
+
+
 
 client.once('ready', () => {
     console.log(`Logged in as ${client.user.tag}!`);
