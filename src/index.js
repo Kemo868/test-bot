@@ -32,15 +32,60 @@ client.on('ready', async () => {
   const channel = client.channels.cache.get('1197785650771005460');
   if (!channel) return console.log('القناة غير موجودة.');
 
+  client.commands = new Collection();
+
+// قراءة ملفات الأوامر
+const commandFiles = fs.readdirSync('../commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+  const command = require(`../commands/${file}`);
+  // تأكد من أن كائن الأمر معرف وله خاصية name
+  if (command && command.data && command.data.name) {
+      client.commands.set(command.data.name, command);
+  } else {
+      console.error(`مشكلة في تحميل الأمر من الملف: ${file}`);
+  }
+  client.once('ready', () => {
+    console.log('البوت جاهز!');
+});
+}
+
+client.once('ready', () => {
+    console.log(`Logged in as ${client.user.tag}!`);
+});
+
+// التعامل مع الأوامر
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isCommand()) return;
+
+    const command = client.commands.get(interaction.commandName);
+
+    if (!command) return;
+
+    try {
+        await command.execute(interaction);
+    } catch (error) {
+        console.error(error);
+        await interaction.reply({ content: 'حدث خطأ أثناء تنفيذ هذا الأمر!', ephemeral: true });
+    }
+});
+
+client.on('ready', async () => {
+  const channel = client.channels.cache.get('1197785650771005460');
+  if (!channel) return console.log('القناة غير موجودة.');
+
   const studentRoleEmbed = new MessageEmbed()
-      .setColor('#002c57')
+      .setColor('#1b9430')
       .setTitle('رول خاص للطلاب والطالبات!')
       .setDescription('هناك رول خاصه للطلبه فقط ولها خصائص عديده. لأخذها يجب التأكد انك طالب في الجامعة العربية المفتوحة ولا نستطيع اعطائك الرول من غير ما نتأكد.')
       .setImage('https://i.imgur.com/5xKSOYk.png')
       .addFields(
           { name: 'كيفية الحصول على الرول', 
-          value: 'يرجى الضغط على زر "طلب" لبدء العملية.' }
+          value: 'سوف ترسل طلب للمشرفين او منسوبي إدارة السيرفر من خلال الضغط على الزر أدناه ثم راح يتواصلون معك و يطلبون منك بعض الإجراءات التالية للتأكد :\n1- أسمك\n2- رقمك الجامعي \n3- صورة من جدولك آخر ترم سجلت فيه' }
       )
+      .setFooter (
+         '...يرجى الضغط على زر "طلب" لبدء العملية.', 
+        )
 
 
   const row = new MessageActionRow()
@@ -50,9 +95,10 @@ client.on('ready', async () => {
               .setLabel('طلب')
               .setStyle('PRIMARY'),
       );
+
+  channel.send({ embeds: [studentRoleEmbed], components: [row] });
   
   console.log('Buttons sent to the channel روم التوثيق 3 ✅.');
-  channel.send({ embeds: [studentRoleEmbed], components: [row] });
 });
 
 client.on('interactionCreate', async interaction => {
