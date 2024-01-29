@@ -20,6 +20,22 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES
   ]
 });
+client.on("ready", () => {
+    setInterval(() => {
+      client.user.setActivity(updateUptime());
+    }, 60 * 1000);
+  });
+  
+  uptime = 0;
+  function updateUptime() {
+    uptime++;
+    const days = Math.floor(uptime / 1440);
+    const hours = Math.floor((uptime % 1440) / 60);
+    const minutes = Math.floor(uptime % 60);
+    const uptimeMessage = `  D: ${days} H: ${hours} M: ${minutes}`;
+  
+    return uptimeMessage;
+  }
 
 app.listen(3000, () => console.log('Hi.'));
 
