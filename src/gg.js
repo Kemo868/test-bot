@@ -1620,3 +1620,4 @@ client.on("messageCreate", message => {
       .catch(error => console.error('Error reacting to message:', error));
   }
 });
+-------------------------------------
