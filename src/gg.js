@@ -3,8 +3,6 @@
 //---------------------------------------------------------
 require('dotenv').config();
 const keep_alive = require('../keep_alive.js')
-const express = require('express');
-const app = express();
 const fs = require('fs');
 const { prefix } = require('../config.json');
 const { Client, Intents, Collection, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
@@ -36,21 +34,10 @@ client.on("ready", () => {
     return uptimeMessage;
   }
 
-app.listen(3000, () => console.log('Hi.'));
-
-app.use('/ping', (req, res) => {
-  res.send({ embeds: [new Date()] });
-});
-
 client.on('ready', () => {
   console.log(`Logged in as ${client.user.tag}!✅`);
   console.log(`I am Here ✅...`);
 
-  client.user.setStatus('online');
-  client.user.setActivity(`${prefix}help`, {
-    type: 'PLAYING'
-  });
-});
 const allowedRoleIds = ['1198939720940527616', '1192593384481755296'];
 const adminRole = '1192593384481755296';
 const owners = '232323123123132132132';
