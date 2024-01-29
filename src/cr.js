@@ -25,8 +25,8 @@ app.use('/ping', (req, res) => {
 });
 
 client.on('ready', () => {
-  console.log(`Logged in as ${client.user.tag}!`);
-  console.log(`I am Here...`);
+  console.log(`Logged in as ${client.user.tag}!✅`);
+  console.log(`I am Here ✅...`);
 
   client.user.setStatus('online');
   client.user.setActivity(`${prefix}help`, {
