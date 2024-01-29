@@ -3,7 +3,6 @@
 //---------------------------------------------------------
 require('dotenv').config();
 const keep_alive = require('../keep_alive.js')
-const path = require('path');
 const express = require('express');
 const app = express();
 const fs = require('fs');
@@ -55,7 +54,9 @@ client.on('ready', () => {
 const allowedRoleIds = ['1198939720940527616', '1192593384481755296'];
 const adminRole = '1192593384481755296';
 const owners = '232323123123132132132';
+
 client.login(process.env.TOKEN);
+
 // نهاية الاساسيات
 //---------------------------------------------------------
 // كود الهيلب
