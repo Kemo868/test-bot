@@ -36,6 +36,10 @@ client.on("ready", () => {
 const express = require('express');
 const app = express();
 
+app.use('/ping', (req, res) => {
+  res.send({ embeds: [new Date()] });
+});
+
 app.listen(3000, () => console.log('Hi.'));
 
 app.use('/ping', (req, res) => {
