@@ -17,6 +17,9 @@ const client = new Client({
     Intents.FLAGS.DIRECT_MESSAGES
   ]
 });
+
+client.login(process.env.TOKEN);
+
 client.on("ready", () => {
     setInterval(() => {
       client.user.setActivity(updateUptime());
@@ -41,8 +44,6 @@ client.on('ready', () => {
 const allowedRoleIds = ['1198939720940527616', '1192593384481755296'];
 const adminRole = '1192593384481755296';
 const owners = '232323123123132132132';
-
-client.login(process.env.TOKEN);
 
 // نهاية الاساسيات
 //---------------------------------------------------------
