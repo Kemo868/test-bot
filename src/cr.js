@@ -1,6 +1,9 @@
 //---------------------------------------------------------
 // الاساسيات في البروجكت
 //---------------------------------------------------------
+require('dotenv').config();
+const keep_alive = require('../keep_alive.js')
+const path = require('path');
 const express = require('express');
 const app = express();
 const fs = require('fs');
