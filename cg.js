@@ -33,6 +33,8 @@ client.on("ready", () => {
   
     return uptimeMessage;
   }
+const express = require('express');
+const app = express();
 
 app.listen(3000, () => console.log('Hi.'));
 
