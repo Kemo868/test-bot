@@ -3,11 +3,8 @@
 //---------------------------------------------------------
 require('dotenv').config();
 const keep_alive = require('./keep_alive.js')
-const path = require('path');
-const express = require('express');
-const app = express();
 const fs = require('fs');
-const { prefix } = require('../config.json');
+const { prefix } = require('./config.json');
 const { Client, Intents, Collection, MessageActionRow, MessageButton, MessageEmbed } = require('discord.js');
 const client = new Client({
   intents: [
