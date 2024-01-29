@@ -99,15 +99,14 @@ client.on('messageCreate', (itsx) => {
 
            ** ✨أوامر التذاكر ✨**
            **
-           ${prefix}new | create ticket
-           ${prefix}ch  | Delete ticket or Close chat ticket
+           ${prefix}new: create ticket
            **
 
            ** ✨أوامر البودكاست ✨**
-         
-           ${prefix}bc
-           ${prefix}obc
-           ${prefix}ebc 
+          جميعها خاصه للمشرفين والادارة
+           ${prefix}bc: هذا الامر يفعل بودكاست و يرسلها لكل الاعضاء
+           ${prefix}obc: كتابة رسالة بالتفاصيل في Embedلجميع الاعضاء 
+           ${prefix}ebc: كتابة رسالة بشكل مباشر لجميع الاعضاء
            **
 
           `);
@@ -633,29 +632,33 @@ client.on("messageCreate", async (niro_games) => {
     niro_games.content === prefix + "عواصم"
   ) {
     const x_capitals = [
-      "https://cdn.discordapp.com/attachments/798926497490010112/798951739687960646/2021-28-13_06__28__29.png",
-      "https://cdn.discordapp.com/attachments/798926497490010112/798952044719243304/2021-30-13_06__30__03.png",
-      "https://cdn.discordapp.com/attachments/798926497490010112/798951871486099516/2021-28-13_06__28__29.png",
+      "https://cdn.discordapp.com/attachments/1196397232644161577/1201665522702491648/bahrain_country2.jpeg?ex=65caa53a&is=65b8303a&hm=49b62b16087807ddb39cad8b6e1052fc589bf576ab63ee468ed234ddf573f519&.png",
+      "https://cdn.discordapp.com/attachments/1196397232644161577/1201664315061698560/87e.jpg?ex=65caa41a&is=65b82f1a&hm=7a85c860b08f628bcc334f12bc6ff8cd90bcd2c4be5c6f935bb9aa8ba57bef08&.png",
+      "https://cdn.discordapp.com/attachments/1196397232644161577/1201665679355547669/faf50b7d4bf048fcab80445e61787c11.jpeg?ex=65caa55f&is=65b8305f&hm=b1e869c5a2576da439fec7dc4bd66226f9c51e96e3b749a07dce5e45547f1bdd&.png",
       "https://cdn.discordapp.com/attachments/798926497490010112/798951510582886420/2021-27-13_06__27__49.png",
       "https://cdn.discordapp.com/attachments/798926497490010112/798951367917174874/2021-27-13_06__27__18.png",
       "https://cdn.discordapp.com/attachments/798926497490010112/798951194633699359/2021-26-13_06__26__36.png",
     ];
+
     const x3_capitals = Math.floor(Math.random() * x_capitals.length);
     const brand_capitals = new MessageEmbed()
       .setImage(x_capitals[x3_capitals])
       .setTitle("**أسرع شخص يرسل العاصمة خلال 10 ثواني**");
 
+      if (brand_capitals.fields.length > 0) {
+        niro_games.channel.send({ embeds: [brand_capitals] });
+      }
+
     try {
       const r_capitals = await niro_games.channel.awaitMessages({
         filter: (msg) => msg.content === x2_capitals[x3_capitals],
         max: 1,
-        time: 20000,
+        time: 10000,
         errors: ["time"],
       });
 
-      niro_games.reply(
-        new MessageEmbed().setTitle("**لقد قمت بإرسال العاصمة في الوقت المناسب**")
-      );
+      // أضف قيمة متغير r_capitals إلى رسالة الرد
+      niro_games.reply({ content: `لقد أجبت بشكل صحيح! العاصمة هي ${r_capitals.first().content}` });
     } catch (error) {
       niro_games.channel.send(
         new MessageEmbed().setTitle(
@@ -692,7 +695,7 @@ client.on("messageCreate", message => {
       const action = isShowCommand ? "إظهار" : "إخفاء";
 
       const embed = new MessageEmbed()
-        .setColor("RANDOM")
+        .setColor("#002c57")
         .setThumbnail(message.guild.iconURL())
         .setDescription(`> **تم ${action} هذه الغرفة ${message.channel}**`)
         .setFooter(`بواسطة ${message.author.username}`);
@@ -791,7 +794,7 @@ client.on("messageCreate", message => {
          في السيرفر : ${message.guild.name}
          بواسطة : ${message.author}
         **`)
-        .setColor("GREY")
+        .setColor("#002c57")
         .setFooter('Id ' + message.author.id, message.author.avatarURL());
   
       member.send({ embeds: [mens] });
@@ -930,7 +933,7 @@ client.on("messageCreate", message => {
     if (message.content.startsWith(prefix + "love")) {
         let user = message.mentions.users.first();
         if (!user) return message.reply({ content: '**الرجاء منشن شخص**' });
-        if (user.id == message.author.id) return message.reply({ content: "**طبعا أنت تحب نفسك**" });
+        if (user.id == message.author.id) return message.reply({ content: "**طبعاأنت تحب نفسك**" });
 
         message.channel.send({
             embeds: [
@@ -947,29 +950,37 @@ client.on("messageCreate", message => {
   
   // kil game 
   
-  client.on("messageCreate", message => {
-    if (message.content.startsWith(prefix + 'kill')) {
-        let user = message.mentions.users.first();
-        if (!user) {
-            message.reply({ content: `يجب عليك منشن الشخص الذي تريد قتله.` })
-        }
 
-        let killImages = [
-            'https://steamuserimages-a.akamaihd.net/ugc/782985908083449716/7D8D3247449A582D75182D76E083F3C11F7A9A1F/',
-            'ضع الصورة التي تريدها هنا',
-            // يمكنك إضافة المزيد من الصور حسب الرغبة
-        ];
+  client.on('messageCreate', async message => {
+    if (message.author.bot) return;
+    const command = message.content.split(' ')[0];
+if (command === `${prefix}kill`) {
+  // التحقق من ذكر مستخدم آخر في الرسالة
+  if (message.mentions.users.size === 0) {
+    await message.reply({ content: "يجب عليك منشن الشخص الذي تريد قتله.", allowedMentions: { repliedUser: false } });
+    return;  // إنهاء التنفيذ إذا لم يتم ذكر أي مستخدم
+  }
 
-        message.channel.send({
-            embeds: [
-                new MessageEmbed()
-                    .setDescription(`${message.author} قتل **${user}**`)
-                    .setImage(
-                        killImages[Math.floor(Math.random() * killImages.length)]
-                    )
-            ]
-        });
-    }
+  const killImages = [
+    'https://steamuserimages-a.akamaihd.net/ugc/782985908083449716/7D8D3247449A582D75182D76E083F3C11F7A9A1F/',
+    'ضع الصورة التي تريدها هنا',
+    // يمكنك إضافة المزيد من الصور حسب الرغبة
+  ];
+
+  // تحقق من أن لدى البوت إذن "إرسال الرسائل" في القناة
+  if (!message.guild.me.permissionsIn(message.channel).has('SEND_MESSAGES')) {
+    await message.reply({ content: "ليس لدي إذن 'إرسال الرسائل' في هذه القناة.", allowedMentions: { repliedUser: false } });
+    return; // إنهاء التنفيذ إذا لم يكن الإذن متاحًا
+  }
+
+  // إنشاء رسالة مضمنة
+  const embed = new MessageEmbed()
+    .setDescription(`${message.author} قتل **${message.mentions.users.first()}**`)
+    .setImage(killImages[Math.floor(Math.random() * killImages.length)]);
+
+  // إرسال الرسالة المضمنة
+  await message.channel.send({ embeds: [embed] });
+}
 });
   
   
@@ -979,7 +990,6 @@ client.on("messageCreate", message => {
         'https://pm1.narvii.com/7630/ca050d19dc9832424a888f017e6f1c28762d8f17r1-863-540v2_hq.jpg',
         'https://i.pinimg.com/originals/9a/b7/b7/9ab7b7e225f2cc5ee190e8a67c126c66.jpg',
         'https://pbs.twimg.com/media/Ecq6FxYWkAIQ8pE.jpg',
-        'https://i.ytimg.com/vi/sm6z50Qoxqg/maxresdefault.jpg',
         'https://64.media.tumblr.com/tumblr_m7mw1u9vb81rr8kmyo1_1280.jpg',
         'https://i.ytimg.com/vi/7lTvO9wxqPw/hqdefault.jpg',
         'https://pm1.narvii.com/7723/6ed7ca7c14b84d2f36a9383ba01751a600e537f8r1-799-624v2_uhq.jpg',
@@ -1028,90 +1038,107 @@ client.on("messageCreate", message => {
     }
   });
   
-  client.on("messageCreate", message => {
+  client.on("messageCreate", async message => {
     if (message.author.bot) return;
 
-    var command = message.content.split(" ")[0];
-    if (command == prefix + 'ebc') {
-        // فحص الرتب
+    const command = message.content.split(" ")[0];
+    if (command === `${prefix}ebc`) {
+        // تحقق من الأدوار المسموح بها
         const hasAllowedRole = message.member.roles.cache.some(role => allowedRoleIds.includes(role.id));
         if (!hasAllowedRole)
-            return message.channel.send({ content: '**لا تستطيع استخدام هذا الامر فقط المشرفين و الادارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
+            return message.reply({ content: '**لا تستطيع استخدام هذا الأمر فقط المشرفين والإدارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
 
-
-        var args = message.content.split(' ').slice(1).join(' ');
+        const args = message.content.split(' ').slice(1).join(' ');
         if (!args)
-            return message.channel.send({ content: `**➥ الاستخدام:** ${prefix} ebc رسالتك` });
+            return message.reply({ content: `**➥ الاستخدام:** ${prefix} ebc رسالتك`, ephemeral: true });
 
-        let bcSure = new MessageEmbed()
+        // إنشاء صف أزرار
+        const row = new MessageActionRow()
+            .addComponents(
+                new MessageButton()
+                    .setCustomId('yes')
+                    .setLabel('موافق')
+                    .setStyle('SUCCESS'),
+                new MessageButton()
+                    .setCustomId('no')
+                    .setLabel('إلغاء')
+                    .setStyle('DANGER')
+            );
+
+        // إرسال الرسالة مع الأزرار
+        const bcSure = new MessageEmbed()
             .setTitle(`:mailbox_with_mail: **هل أنت متأكد أنك تريد إرسال رسالتك إلى** ${message.guild.memberCount} **عضو؟**`)
             .setThumbnail(client.user.avatarURL())
             .setColor('RANDOM')
             .setDescription(`**\n:envelope: ➥ رسالتك**\n\n${args}`)
             .setTimestamp()
-            .setFooter(message.author.tag, message.author.avatarURL());
+            .setFooter({
+                text: message.author.tag,
+                iconURL: message.author.avatarURL()
+            });
 
-        message.channel.send({ embeds: [bcSure] }).then(msg => {
-            msg.react('✅').then(() => msg.react('❎'));
-            message.delete();
+        const msg = await message.channel.send({ embeds: [bcSure], components: [row] });
 
-            let yesEmoji = (reaction, user) => reaction.emoji.name === '✅' && user.id === message.author.id;
-            let noEmoji = (reaction, user) => reaction.emoji.name === '❎' && user.id === message.author.id;
+        // ضبط وقت انتهاء صلاحية التفاعلات
+        const filter = (interaction) => interaction.isButton() && interaction.message.id === msg.id;
+        const collector = msg.createMessageComponentCollector({ filter, time: 10000 });
 
-            let sendBC = msg.createReactionCollector({ filter: yesEmoji, time: 60000 });
-            let dontSendBC = msg.createReactionCollector({ filter: noEmoji, time: 60000 });
+        const channel = message.channel;
 
-            sendBC.on('collect', r => {
+        collector.on('collect', async (interaction) => {
+            if (interaction.customId === 'yes') {
+                await channel.send(`:timer: **يتم الآن الإرسال إلى** \`${message.guild.memberCount}\` **عضو**`);
+
                 message.guild.members.cache.forEach(member => {
                     if (member.user.bot) return;
-                    var bc = new MessageEmbed()
+                    const bc = new MessageEmbed()
                         .addField('» السيرفر:', `${message.guild.name}`)
                         .addField('» المرسل:', `${message.author.username}#${message.author.discriminator}`)
                         .addField('» الرسالة:', args)
                         .setColor('#000000');
                     member.send({ embeds: [bc] });
                 });
-                message.channel.send({ content: `:timer: **يتم الآن الإرسال إلى** \`${message.guild.memberCount}\` **عضو**` })
-                    .then(m => m.delete({ timeout: 5000 }));
-                msg.delete();
-            });
 
-            dontSendBC.on('collect', r => {
-                msg.delete();
-                message.reply({ content: ':white_check_mark: **تم إلغاء الإرسال بنجاح**' })
-                    .then(m => m.delete({ timeout: 5000 }));
-            });
+                setTimeout(async () => {
+                    await channel.send(':white_check_mark: **تم الإرسال بنجاح إلى جميع الأعضاء**').then(() => {
+                        msg.delete();
+                    });
+                }, 5000);
+            } else if (interaction.customId === 'no') {
+                channel.send(':white_check_mark: **تم إلغاء الإرسال بنجاح**').then(() => {
+                    msg.delete();
+                });
+            }
         });
-    }
-});
 
-  client.on("messageCreate", async message => {
-    if(message.channel.type === "UNKNOWN") return;
-    if(message.author.bot) return;
-    let args = message.content.split(' ');
-    if(args[0] === `${prefix}obc`) {
-      const hasAllowedRole = message.member.roles.cache.some(role => allowedRoleIds.includes(role.id));
-      if (!hasAllowedRole)
-          return message.channel.reply({ content: '**لا تستطيع استخدام هذا الامر فقط المشرفين و الادارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
+        collector.on('end', () => {
+            msg.edit({ components: [] });
+        });
+    } else if (command === `${prefix}obc`) {
+        // تحقق من الأدوار المسموح بها
+        const hasAllowedRole = message.member.roles.cache.some(role => allowedRoleIds.includes(role.id));
+        if (!hasAllowedRole)
+            return message.reply({ content: '**لا تستطيع استخدام هذا الأمر فقط المشرفين والإدارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
 
-        if(!args[1]) 
-            return message.channel.send({ content: '- **يجب عليك كتابة الرسالة بعد الأمر**' });
+        const args = message.content.split(' ').slice(1);
+        if (!args[0])
+            return message.reply({ content: '- **يجب عليك كتابة الرسالة بعد الأمر**', ephemeral: true });
 
         let msgCount = 0;
         let errorCount = 0;
         let successCount = 0;
-        
+
         const statusMsg = await message.channel.send({ content: `**- [ 🔖 :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ 📥 :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ 📤 :: ${errorCount} ]・عدد الرسائل الغير مستلمة\n- [ ▫ :: Sending ]・حالة الرسائل المرسلة**` });
 
         message.guild.members.cache.forEach(member => {
             if (member.user.bot) return;
-            member.send(args.slice(1).join(' '))
+            member.send(args.join(' '))
                 .then(() => {
                     successCount++;
                     msgCount++;
-                    statusMsg.edit({ content: `**- [ 🔖 :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ 📥 :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ 📤 :: ${errorCount} ]・عدد الرسائل الغير مستلمة\n- [ ▫ :: Sending ]・حالة الرسائل المرسلة**` });
+                    statusMsg.edit({ content: `**- [ 🔖 :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ 📥 :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ 📤 :: ${errorCount} ]・عدد الرسائل الغير مستلمة\n- [ ⬛ :: Done ]・حالة الرسائل المرسلة**` });
                 })
-                .catch(e => {
+                .catch(() => {
                     errorCount++;
                     msgCount++;
                     statusMsg.edit({ content: `**- [ 🔖 :: ${msgCount} ] ・عدد الرسائل المرسلة**\n**- [ 📥 :: ${successCount} ] ・عدد الرسائل المستلمة**\n**- [ 📤 :: ${errorCount} ]・عدد الرسائل الغير مستلمة\n- [ ▫ :: Sending ]・حالة الرسائل المرسلة**` });
@@ -1119,6 +1146,10 @@ client.on("messageCreate", message => {
         });
     }
 });
+
+/*
+-----------------------------------------
+*/
   
 client.on("messageCreate", async (prof) => {
   if (prof.content.startsWith(prefix + 'lock')) {
@@ -1139,7 +1170,7 @@ client.on("messageCreate", async (prof) => {
     prof.channel.send({ embeds: [professor] });
   }
 
-  if (prof.content.startsWith(prefix + 'unolck')) {
+  if (prof.content.startsWith(prefix + 'unlock')) {
     const memberRoles = prof.member.roles.cache.map(role => role.id);
     if (!allowedRoleIds.some(roleId => memberRoles.includes(roleId))) {
       return prof.reply({ content: '**لا تستطيع استخدام هذا الامر فقط المشرفين و الادارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
@@ -1158,14 +1189,16 @@ client.on("messageCreate", async (prof) => {
   }
 });
 
+/*
+-------------------------------------------
+*/
+
 client.on("messageCreate", async message => {
   let command = message.content.split(" ")[0];
-  
   if (command == prefix + "unban") {
     // تحقق من وجود الرتبة المسموح بها
     if (!message.member.roles.cache.has(adminRole)) {
       return message.reply({ content: '**لا تستطيع استخدام هذا الامر فقط المشرفين و الادارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
-
     }
 
     let args = message.content.split(" ").slice(1).join(" ");
@@ -1198,13 +1231,18 @@ client.on("messageCreate", async message => {
   }
 });
 
+/*
+---------------------------------------------
+*/
   
-client.on("messageCreate", message => {
-  if (message.content.startsWith(prefix + 'bc')) {
-    if (!message.member.roles.cache.has(allowedRoleIds)) {
-      return message.reply({ content: '**لا تستطيع استخدام هذا الامر فقط المشرفين و الادارة وحدهم من يستطيعون فعل ذلك .**', ephemeral: true });
+client.on('messageCreate', async message => {
+  if (message.author.bot) return;
 
-    }
+  const command = message.content.split(" ")[0];
+  if (command === `${prefix}bc`) {
+      if (!message.member.roles.cache.some(role => allowedRoleIds.includes(role.id))) {
+          return message.reply({ content: '**لا تستطيع استخدام هذا الأمر فقط المشرفين و الإدارة وحدهم من يستطيعون فعل ذلك.**', ephemeral: true });
+      }
 
       const args = message.content.split(" ").slice(1).join(" ");
       if (!args) {
@@ -1214,26 +1252,29 @@ client.on("messageCreate", message => {
       const BcList = new MessageEmbed()
           .setColor("#ffff")
           .setThumbnail(message.author.avatarURL())
-          .setAuthor(`محـتوى الرسالة : ${args}`)
+          .setAuthor({ name: `محـتوى الرسالة : ${args}`, iconURL: message.author.avatarURL() })
           .setDescription(`**أضــغط على ✅ لإرسال البودكاست**`);
 
       const row = new MessageActionRow()
           .addComponents(
               new MessageButton()
                   .setCustomId('confirm')
-                  .setLabel('✅')
+                  .setLabel('موافق')
                   .setStyle('SUCCESS'),
               new MessageButton()
                   .setCustomId('cancel')
-                  .setLabel('❎')
+                  .setLabel('إلغاء')
                   .setStyle('DANGER'),
           );
 
-      message.reply({ embeds: [BcList], components: [row] }).then(msg => {
-          const filter = i => i.customId === 'confirm' || i.customId === 'cancel';
+      message.channel.send({ embeds: [BcList], components: [row] }).then(async msg => {
+          const filter = (i) => {
+              return (i.customId === 'confirm' || i.customId === 'cancel') && i.user.id === message.author.id;
+          };
+
           const collector = msg.createMessageComponentCollector({ filter, time: 60000 });
 
-          collector.on('collect', (i) => {
+          collector.on('collect', async i => {
               if (i.customId === 'confirm') {
                   message.guild.members.cache.forEach(member => {
                       if (member.user.bot) return;
@@ -1244,7 +1285,7 @@ client.on("messageCreate", message => {
                               { name: '» الرسالة:', value: args }
                           )
                           .setColor('#000000');
-                      member.reply({ embeds: [bc] }).catch(() => {});
+                      member.send({ embeds: [bc] }).catch(() => {});
                   });
 
                   const successBc = new MessageEmbed()
@@ -1252,14 +1293,14 @@ client.on("messageCreate", message => {
                       .setTitle('تم إرسال البودكاست بنجاح')
                       .setDescription('لقد تم إرسال البودكاست إلى جميع الأعضاء');
 
-                  msg.edit({ embeds: [successBc], components: [] });
+                  await i.update({ embeds: [successBc], components: [] });
               } else if (i.customId === 'cancel') {
                   const canceledBc = new MessageEmbed()
                       .setColor("#ff0000")
                       .setTitle('تم إلغاء البودكاست')
                       .setDescription('لقد تم إلغاء عملية إرسال البودكاست');
 
-                  msg.edit({ embeds: [canceledBc], components: [] });
+                  await i.update({ embeds: [canceledBc], components: [] });
               }
           });
 
@@ -1268,162 +1309,117 @@ client.on("messageCreate", message => {
                   msg.edit({ components: [] });
               }
           });
-
-          collector.on("collect", (reaction) => {
-            if (reaction.emoji.name === '✅') {
-                message.channel.reply({ content: `✅**تـــم الإرسال**` }).then(m => m.delete({ timeout: 5000 }));
-
-                message.guild.members.cache.forEach(member => {
-                    if (!member.user.bot) {
-                        var bc = new MessageEmbed()
-                            .setColor('#ffff')
-                            .setAuthor(`Server: ${message.guild.name}`)
-                            .setDescription(`✉️ **الرسالة :** \n**${args}**\n\n:hammer_pick:  **من قبل :** \n**${message.author.username}**`)
-                            .setFooter(client.user.tag, client.user.avatarURL())
-                            .setThumbnail(client.user.avatarURL());
-
-                        member.reply({ embeds: [bc] }).catch(e => console.log(`لا يمكن أرسال الرسالة الى ${member.user.tag}.`));
-                    }
-                });
-
-                msg.delete();
-            } else {
-                msg.delete();
-                message.reply({ content: ':white_check_mark: **تم إلغاء الإرسال بنجاح**' }).then(m => m.delete({ timeout: 5000 }));
-            }
-          });
-
-          collector.on("end", () => {
-            msg.delete();
-          });
-        });
-      }
-    });
+      });
+  }
+});
   
   //ticket
   
   
   
-client.on("messageCreate", async message => {
-  if (message.content.startsWith(prefix + "new")) {
+  client.on("messageCreate", async message => {
+    if (message.content.startsWith(prefix + "new")) {
       // تحميل رقم التذكرة من الملف
-      let ticketNumber = parseInt(fs.readFileSync('ticketNumber.txt', 'utf8'));
+      let ticketNumber = parseInt(fs.readFileSync("ticketNumber.txt", "utf8"));
       const embed1 = new MessageEmbed()
-          .setColor("GREY")
-          .setTitle("هل انت متأكد من أنشاء تذكرة ؟🎟️")
-          .setDescription(" اذا كنت متأكد يرجى الضغط على✅\nوللإلغاءاضغط على ❎");
-
+        .setColor("GREY")
+        .setTitle("هل انت متأكد من أنشاء تذكرة ؟🎟️")
+        .setDescription("اذا كنت متأكد يرجى الضغط على✅\nوللإلغاءاضغط على ❎");
+  
       const msg = await message.channel.send({ embeds: [embed1] });
-      await msg.react('✅');
-      await msg.react('❎');
-
-      const filter = (reaction, user) => ['✅', '❎'].includes(reaction.emoji.name) && user.id === message.author.id;
+      await msg.react("✅");
+      await msg.react("❎");
+  
+      const filter = (reaction, user) => ["✅", "❎"].includes(reaction.emoji.name) && user.id === message.author.id;
       const collector = msg.createReactionCollector({ filter, time: 60000 });
-
-      collector.on('collect', async (reaction, user) => {
-          if (reaction.emoji.name === '✅') {
-              message.reply("تم إنشاء تذكرتك بنجاح! ✅");
-              try {
-                  const formattedTicketNumber = ticketNumber.toString().padStart(5, '0');
-                  const channel = await message.guild.channels.create(`ticket-${formattedTicketNumber}`, { type: "GUILD_TEXT" });
-                  await channel.permissionOverwrites.create(message.guild.id, {
-                      VIEW_CHANNEL: false,
-                      SEND_MESSAGES: false
-                  });
-                  await channel.permissionOverwrites.create(message.author.id, {
-                      VIEW_CHANNEL: true,
-                      SEND_MESSAGES: true
-                  });
-                  const welcomeEmbed = new MessageEmbed()
-                      .setTitle(" مرحبًا بك في التذكرة! أخبرنا عن مشكلتك أو سبب فتح التذكرة وسنرد في أقرب وقت :hammer_pick: \n ان رغبت في الغاء التيكت او حذف التيكت الرجاء كتابة الامر التالي : -ch ")
-                      .setColor("GREEN");
-
-                  channel.send({ content: `<@${message.author.id}>`, embeds: [welcomeEmbed] });
-                  
-                  msg.delete();
-
-                  // زيادة رقم التذكرة وحفظه في الملف
-                  ticketNumber++;
-                  fs.writeFileSync('ticketNumber.txt', ticketNumber.toString(), 'utf-8');
-
-                  const log = message.guild.channels.cache.find(channel => channel.name === 'ticket-log');
-                  if (log) {
-                      const logEmbed = new MessageEmbed()
-                          .setThumbnail(client.user.avatarURL())
-                          .setColor("GREEN")
-                          .setTitle("تم إنشاء تذكرة 🎟️")
-                          .addFields(
-                              { name: "تم إنشائها بواسطة :", value: `${message.author.username}` },
-                              { name: "رقم التذكرة", value: `${formattedTicketNumber}`, inline: true }
-                          )
-                          .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL() });
-
-                      log.send({ embeds: [logEmbed] });
-                  } else {
-                      console.error("Could not find 'ticket-log' channel.");
-                      message.reply("روم التيكتات غير موجود");
-                  }
-              } catch (error) {
-                  console.error("Error creating ticket channel or deleting message : ", error);
-                  message.reply("خطأ في إنشاء قناة التذاكر");
-              }
-          } else if (reaction.emoji.name === '❎') {
-              msg.delete();
-              message.reply("تم إلغاء فتح تذكرة.");
-          }
-      });
-
-      collector.on('end', async collected => {
-        try {
-            // تحقق من وجود الرسالة وأنها ليست محذوفة
-            if (msg && !msg.deleted) {
-                // حاول حذف الرسالة
-                await msg.delete();
+  
+      // تعريف المتغير row داخل دالة ReactionCollector
+      collector.on("collect", async (reaction, user) => {
+        const row = new MessageActionRow()
+          .addComponents(
+            new MessageButton()
+              .setCustomId('cancel_ticket')
+              .setLabel('إلغاء التذكرة')
+              .setStyle('PRIMARY'),
+            new MessageButton()
+              .setCustomId('delete_ticket')
+              .setLabel('حذف التذكرة')
+              .setStyle('DANGER'),
+          );
+  
+        if (reaction.emoji.name === "✅") {
+          message.reply("تم إنشاء تذكرتك بنجاح! ✅");
+          try {
+            const formattedTicketNumber = ticketNumber.toString().padStart(5, "0");
+            const channel = await message.guild.channels.create(`ticket-${formattedTicketNumber}`, { type: "GUILD_TEXT" });
+            await channel.permissionOverwrites.create(message.guild.id, {
+              VIEW_CHANNEL: false,
+              SEND_MESSAGES: false,
+            });
+            await channel.permissionOverwrites.create(message.author.id, {
+              VIEW_CHANNEL: true,
+              SEND_MESSAGES: true,
+            });
+            const welcomeEmbed = new MessageEmbed()
+              .setTitle("مرحبا بك في التذكرة! أخبرنا عن مشكلتك أو سبب فتح التذكرة وسنرد في أقرب وقت :hammer_pick: \nان رغبت في الغاء التيكت او حذف التيكت الرجاء كتابة الامر التالي : -ch ")
+              .setColor("GREEN");
+  
+            // إضافة صف الأزرار إلى الرسالة
+            channel.send({ content: `<@${message.author.id}>`, embeds: [welcomeEmbed], components: [row] });
+  
+            msg.delete();
+  
+            // زيادة رقم التذكرة وحفظه في الملف
+            ticketNumber++;
+            fs.writeFileSync("ticketNumber.txt", ticketNumber.toString(), "utf-8");
+  
+            const log = message.guild.channels.cache.find(channel => channel.name === "ticket-log");
+            if (log) {
+              const logEmbed = new MessageEmbed()
+                .setThumbnail(client.user.avatarURL())
+                .setColor("GREEN")
+                .setTitle("تم إنشاء تذكرة 🎟️")
+                .addFields(
+                  { name: "تم إنشائها بواسطة :", value: `${message.author.username}` },
+                  { name: "رقم التذكرة", value: `${formattedTicketNumber}`, inline: true }
+                )
+                .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL() });
+  
+              log.send({ embeds: [logEmbed] });
+            } else {
+              console.error("Could not find 'ticket-log' channel.");
+              message.reply("روم التيكتات غير موجود");
             }
-        } catch (error) {
-            // التعامل مع أي أخطاء خلال محاولة الحذف
-            console.error("Error deleting message:", error);
+          } catch (error) {
+            console.error("Error creating ticket channel or deleting message : ", error);
+            message.reply("خطأ في إنشاء قناة التذاكر");
+          }
+        } else if (reaction.emoji.name === "❎") {
+          msg.delete();
+          message.reply("تم إلغاء فتح تذكرة.");
         }
-    
+      });
+  
+      collector.on("end", async collected => {
+        try {
+          // تحقق من وجود الرسالة وأنها ليست محذوفة
+          if (msg && !msg.deleted) {
+            // حاول حذف الرسالة
+            await msg.delete();
+          }
+        } catch (error) {
+          // التعامل مع أي أخطاء خلال محاولة الحذف
+          console.error("Error deleting message:", error);
+        }
+  
         // تحقق من أن هناك ردود تم جمعها
         if (collected.size > 0) {
-            // تعديل الرسالة لإزالة الأزرار
-            msg.edit({ components: [] }).catch(error => {
-                console.error("Error editing message:", error);
-            });
+          // تعديل الرسالة لإزالة الأزرار
+          msg.edit({ components: [] }).catch(error => {
+            console.error("Error editing message:", error);
+          });
         }
-    })
-  }
-});
-
-  
-  /*
-  - [ Copyright youssefgames ] -
-  */
-  
-  
-  
-  client.on("messageCreate", message => {
-  
-    if (message.content === prefix + "ch") {
-      if (!message.member.permissions.has("MANAGE_MESSAGES"))
-        return message.channel.send({ content: "ليس لديك صلاحية **MANAGE_MESSAGES**!" });
-      if (!message.channel.name.includes("ticket-"))
-        return message.channel.send({ content: "**❌ | هذه ليست قناة تذكرة**" });
-  
-      const row = new MessageActionRow()
-        .addComponents(
-          new MessageButton()
-            .setCustomId('cancel_ticket')
-            .setLabel('إلغاء التذكرة')
-            .setStyle('PRIMARY'),
-          new MessageButton()
-            .setCustomId('delete_ticket')
-            .setLabel('حذف التذكرة')
-            .setStyle('DANGER'),
-        );
-  
-      message.reply({ content: 'الرجاء اختيار الإجراء المناسب:', components: [row] });
+      });
     }
   });
   
@@ -1436,7 +1432,7 @@ client.on("messageCreate", async message => {
       interaction.reply({ content: 'تم إلغاء التذكرة بنجاح!', ephemeral: true });
   
       if (!interaction.channel.name.includes("ticket-"))
-        return interaction.channel.send({ content: "**❌ | هذا ليس قناة تذكرة**" });
+        return interaction.channel.send({ content: "**❌ | هذه ليست قناة تذكرة**" });
   
       interaction.channel.permissionOverwrites.edit(interaction.guild.id, {
         VIEW_CHANNEL: false,
@@ -1455,7 +1451,7 @@ client.on("messageCreate", async message => {
           .setColor("GREEN")
           .setTitle("تذكرة مغلقة 🔒")
           .addField("تم إغلاقها بواسطة:", `${interaction.user.username}`)
-          .setFooter(interaction.user.id, interaction.user.avatarURL());
+          .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL()});
   
         log.send({ embeds: [embed] });
       } else {
@@ -1474,7 +1470,7 @@ client.on("messageCreate", async message => {
           .setColor("GREEN")
           .setTitle("تذكرة تم حذفها 🗑️")
           .addField("تم الحذف بواسطة:", `${interaction.user.username}`)
-          .setFooter(interaction.user.id, interaction.user.avatarURL());
+          .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL()});
         log.send({ embeds: [embed] });
       } else {
         console.error("لم يتم العثور على روم 'ticket-log'.");
