@@ -66,8 +66,8 @@ client.on('messageCreate', (itsx) => {
 
       .setColor('#e9b813')
       .setTitle('اوامر البوت :')
-      .setDescription(`**
-          ** ✨الأوامر العامة ✨  **
+      .setDescription(`
+          ** ✨الأوامر العامة ✨  
 
           ${prefix}vote       | ${prefix}server
           ${prefix}uptime     | ${prefix}ping
@@ -76,7 +76,7 @@ client.on('messageCreate', (itsx) => {
           ${prefix}info-bot 
           **  
 
-          ** ✨أوامر المشرفين و الادارة ✨ **
+          ** ✨أوامر المشرفين و الادارة ✨ 
 
            ${prefix}add | ${prefix}mute
            ${prefix}all-bans | ${prefix}unmute
@@ -87,8 +87,8 @@ client.on('messageCreate', (itsx) => {
            ${prefix}kick | ${prefix}unlock 
            **
 
-           ** ✨أوامر الالعاب ✨**
-           **
+           ** ✨أوامر الالعاب ✨
+           
            ${prefix}cut
            ${prefix}kill   | ${prefix}meme
            ${prefix}love   | ${prefix}nokta
@@ -97,20 +97,19 @@ client.on('messageCreate', (itsx) => {
            ${prefix}sara7a | ${prefix}zaf7  
            **
 
-           ** ✨أوامر التذاكر ✨**
-           **
+           ** ✨أوامر التذاكر ✨
+           
            ${prefix}new: create ticket
            **
 
            ** ✨أوامر البودكاست ✨**
-          
+          **
           جميعها خاصه للمشرفين والادارة
+          **
+          **${prefix}bc:** هذا الامر يفعل بودكاست و يرسلها لكل الاعضاء
+           **${prefix}obc:** كتابة رسالة بالتفاصيل في ايمبد لجميع الاعضاء 
+           **${prefix}ebc:** كتابة رسالة بشكل مباشر لجميع الاعضاء
            
-           ${prefix}bc: هذا الامر يفعل بودكاست و يرسلها لكل الاعضاء
-           ${prefix}obc: كتابة رسالة بالتفاصيل في Embedلجميع الاعضاء 
-           ${prefix}ebc: كتابة رسالة بشكل مباشر لجميع الاعضاء
-           **
-
           `);
 
     itsx.channel.send({ embeds: [embed] });
