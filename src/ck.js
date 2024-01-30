@@ -36,7 +36,6 @@ client.on("ready", () => {
     return uptimeMessage;
   }
 
-app.listen(3000, () => console.log('Hi.'));
 
 app.use('/ping', (req, res) => {
   res.send({ embeds: [new Date()] });
