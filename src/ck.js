@@ -103,7 +103,9 @@ client.on('messageCreate', (itsx) => {
            **
 
            ** ✨أوامر البودكاست ✨**
+          
           جميعها خاصه للمشرفين والادارة
+           
            ${prefix}bc: هذا الامر يفعل بودكاست و يرسلها لكل الاعضاء
            ${prefix}obc: كتابة رسالة بالتفاصيل في Embedلجميع الاعضاء 
            ${prefix}ebc: كتابة رسالة بشكل مباشر لجميع الاعضاء
@@ -1423,17 +1425,15 @@ client.on('messageCreate', async message => {
     }
   });
   
-  client.on('interactionCreate', async interaction => {
+  let formattedTicketNumber;
+
+  client.on('interactionCreate', async (interaction, message) => {
     if (!interaction.isButton()) return;
-  
     const member = interaction.guild.members.cache.get(interaction.user.id);
-  
     if (interaction.customId === 'cancel_ticket') {
       interaction.reply({ content: 'تم إلغاء التذكرة بنجاح!', ephemeral: true });
-  
       if (!interaction.channel.name.includes("ticket-"))
         return interaction.channel.send({ content: "**❌ | هذه ليست قناة تذكرة**" });
-  
       interaction.channel.permissionOverwrites.edit(interaction.guild.id, {
         VIEW_CHANNEL: false,
         SEND_MESSAGES: false
@@ -1443,16 +1443,16 @@ client.on('messageCreate', async message => {
         VIEW_CHANNEL: false,
         SEND_MESSAGES: false
       });
-  
       const log = client.channels.cache.find(channel => channel.name === 'ticket-log');
       if (log) {
         const embed = new MessageEmbed()
-          .setThumbnail(client.user.avatarURL())
-          .setColor("GREEN")
-          .setTitle("تذكرة مغلقة 🔒")
-          .addField("تم إغلاقها بواسطة:", `${interaction.user.username}`)
-          .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL()});
-  
+            .setThumbnail(client.user.avatarURL())
+            .setColor("GREEN")
+            .setTitle("تذكرة مغلقة 🔒")
+            .addField("تم إغلاقها بواسطة:", `${interaction.user.username}`, 
+            { name: "رقم التذكرة", value: `${formattedTicketNumber}`, inline: true }
+            )
+            .setFooter({ text: "صورة البروفايل", iconURL: interaction.user.avatarURL() });
         log.send({ embeds: [embed] });
       } else {
         console.error("لم يتم العثور على روم 'ticket-log'.");
@@ -1462,21 +1462,21 @@ client.on('messageCreate', async message => {
   
     if (interaction.customId === 'delete_ticket') {
       interaction.reply({ content: 'تم حذف التذكرة بنجاح!', ephemeral: true });
-  
       const log = client.channels.cache.find(channel => channel.name === 'ticket-log');
       if (log) {
         const embed = new MessageEmbed()
-          .setThumbnail(client.user.avatarURL())
-          .setColor("GREEN")
-          .setTitle("تذكرة تم حذفها 🗑️")
-          .addField("تم الحذف بواسطة:", `${interaction.user.username}`)
-          .setFooter({ text: "صورة البروفايل", iconURL: message.author.avatarURL()});
+            .setThumbnail(client.user.avatarURL())
+            .setColor("GREEN")
+            .setTitle("تذكرة تم حذفها 🗑️")
+            .addField("تم الحذف بواسطة:", `${interaction.user.username}`, 
+            { name: "رقم التذكرة", value: `${formattedTicketNumber}`, inline: true }
+            )
+            .setFooter({ text: "صورة البروفايل", iconURL: interaction.user.avatarURL() });
         log.send({ embeds: [embed] });
       } else {
         console.error("لم يتم العثور على روم 'ticket-log'.");
         interaction.user.send({ content: "**لا يوجد روم لوق. الرجاء إنشاء روم لوق.**" });
       }
-  
       interaction.channel.delete();
     }
   });
