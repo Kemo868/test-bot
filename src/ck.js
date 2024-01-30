@@ -1363,7 +1363,7 @@ client.on('messageCreate', async message => {
               SEND_MESSAGES: true,
             });
             const welcomeEmbed = new MessageEmbed()
-              .setTitle("مرحبا بك في التذكرة! أخبرنا عن مشكلتك أو سبب فتح التذكرة وسنرد في أقرب وقت :hammer_pick: \nان رغبت في الغاء التيكت او حذف التيكت الرجاء كتابة الامر التالي : -ch ")
+              .setTitle("**مرحبا بك في التذكرة! أخبرنا عن مشكلتك أو سبب فتح التذكرة وسنرد في أقرب وقت :hammer_pick:** \nان رغبت في الغاء التيكت او حذف التيكت اضغط على الزر ادناه ")
               .setColor("GREEN");
   
             // إضافة صف الأزرار إلى الرسالة
