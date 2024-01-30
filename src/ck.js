@@ -935,14 +935,14 @@ client.on("messageCreate", message => {
     if (message.content.startsWith(prefix + "love")) {
         let user = message.mentions.users.first();
         if (!user) return message.reply({ content: 'الرجاء منشن شخص' });
-        if (user.id == message.author.id) return message.reply({ content: "طبعا أنت  تحب نفسك" });
+        if (user.id == message.author.id) return message.reply({ content: "طبعا أنت تحب نفسك" });
 
         message.channel.send({
             embeds: [
                 new MessageEmbed()
                     .setColor('#002c57')
                     .setFooter(`طلب بواسطة ${message.author.username}`)
-                    .setTitle(`${message.author.username} يحب <@${user.id}>\n بنسبة \`${Math.floor(Math.random() * 100)}\`%`)
+                    .setTitle(`${message.author.username} يحب <@${user.id}>\n **بنسبة \`${Math.floor(Math.random() * 100)}\`%**`)
                     .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
             ]
         });
