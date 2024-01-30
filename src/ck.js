@@ -47,8 +47,8 @@ client.on('ready', () => {
   console.log(`I am Here ✅...`);
 
   client.user.setStatus('online');
-  client.user.setActivity(`${prefix}help`, {
-    type: 'PLAYING'
+  client.user.setActivity(`${prefix}bot`, {
+    type: 'WATCHING'
   });
 });
 const allowedRoleIds = ['1198939720940527616', '1192593384481755296'];
