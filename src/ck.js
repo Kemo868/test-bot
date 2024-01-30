@@ -916,11 +916,11 @@ client.on("messageCreate", message => {
 
   
       let args = message.content.split(' ').slice(1).join(" ");
-      if (!args) return message.channel.send({ content: 'يرجى كتابة رسالة للتصويت عليها' });
+      if (!args) return message.channel.send({ content: 'يرجى كتابة رسالة للتصويت عليها', ephemeral: true });
   
-      const pollEmbed = new Discord.MessageEmbed()
+      const pollEmbed = new MessageEmbed()
         .setDescription(`**استطلاع جديد :** \n \`${args}\``)
-        .setColor('BLACK')
+        .setColor('#002c57')
         .setThumbnail(message.guild.iconURL())
         .setFooter(`استطلاع من قبل : ${message.author.tag}`);
   
